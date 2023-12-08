@@ -1,0 +1,55 @@
+#1. Gabungkan data dari file custdata2i dan custdata3i menerusi entiti pengecaman terhadap atribut “customer
+#id” yang sama. Abaikan cerapan yang yang tidak mengandungi maklumat atribut yang lengkap.
+
+custdata2i <- read.csv(file.choose(), header = T)
+head(custdata2i)
+
+custdata3i <- read.table(file.choose(), header = T)
+head(custdata3i)
+
+newdata <- merge(custdata2i, custdata3i, by.x = "ID.Customer", by.y = "custid")
+head(newdata)
+
+#2. Bentukkan data set baru bagi pelanggan lelaki yang mempunyai gaji melebihi 7000 dollar dan juga mengandungi maklumat bagi atribut-atribut berikut:
+#  - state.of.res , custid, marital.stat, health.ins, housing.type , num.vehicles , sex, income
+
+str(newdata)
+
+newdata2 <- subset(newdata, income>=7000 & sex == 'M',
+                   select=c(state.of.res, ID.Customer, marital.stat, ins.health, Home.Status, num.vehicles, sex, Working, income))
+head(newdata2)
+
+#3. Tunjukkan data bagi setiap pelanggan dalam bentuk susunan gaji yang semakin tinggi.
+
+newdata3 <- newdata2[order(newdata2$income),]
+head(newdata3)
+
+#4. Misalkan diketahui maklumat baru seperti berikut:
+#- state.of.res: alabama, Louisiana, new york
+#- ID customer: 567891, 33421, 21134
+#- marital.stat: Married, Never Married, bercerai
+#- Ins.health: TRUE, FALSE, TRUE
+#- Home Status: Sewa, Not Available, loan
+#- num.vehicles: 2, 1, 2
+#- sex: M, Male, lelaki
+#- is.employed: TRUE, FALSE, TRUE
+#- income: 99200, Not Available, 150341
+
+x1 <- c("Alabama",567891, "Married", "TRUE", "Rented", 2, "M", "TRUE", 99200)
+x2 <- c("Louisiana",33421, "Never Married", "FALSE", "NA", 1, "M", "FALSE", 0)
+x3 <- c("New York",21134, "Divorced/Separated", "TRUE", "Homeowner with mortgage/loan", 2, "M", "TRUE", 150341)
+
+#5. Tambahkan maklumat cerapan baru tersebut dalam data set anda.
+
+newdata4 <- rbind(newdata3,x1,x2,x3)
+tail(newdata4)
+
+#6. Misalkan diketahui maklumat atribut baru (personal loan) untuk setiap pelanggan (file newinfo), 
+#gabungkan maklumat atribut baru tersebut dengan data set anda
+
+newinfo <- read.table(file.choose(), header = T)
+head(newinfo)
+newdata5 <- merge(newdata4, newinfo, by.x = "ID.Customer", by.y = "ID_pelanggan")
+head(newdata5)
+tail(newdata5)
+
